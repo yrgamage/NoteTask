@@ -1,0 +1,24 @@
+{
+  "name": "NoteTask",
+  "version": "1.0.0",
+  "description": "A simple note-taking application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yoshani Gamage",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  },
+  "scripts": {
+  "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
+  "start:frontend": "cd client && npm run dev",
+  "start:backend": "cd server && npm start"
+}
+
+}
