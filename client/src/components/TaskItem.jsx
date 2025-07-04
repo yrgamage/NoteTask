@@ -1,7 +1,15 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
 
 const TaskItem = ({ task, onToggleComplete, onDelete }) => {
+
+   useEffect(()=>{
+    axios.get('http://localhost:3000')
+    .then (res => console.log(res))
+    .catch(err=>console.log(err))
+    },[])
   const [isDeleting, setIsDeleting] = useState(false);
   const [isCompleting, setIsCompleting] = useState(false);
 
@@ -35,7 +43,7 @@ const TaskItem = ({ task, onToggleComplete, onDelete }) => {
                   ${isDeleting ? 'animate-pulse scale-95' : ''}`}
     >
       <div className="flex items-start justify-between space-x-4">
-        <div className="flex items-start space-x-4 flex-1 min-w-0">
+        <div className="flex items-start flex-1 min-w-0 space-x-4">
           {/* Checkbox */}
           <button
             onClick={handleToggleComplete}
@@ -78,7 +86,7 @@ const TaskItem = ({ task, onToggleComplete, onDelete }) => {
               </span>
               
               {task.completed && (
-                <span className="px-2 py-1 bg-success/20 text-success rounded-full text-xs font-medium">
+                <span className="px-2 py-1 text-xs font-medium rounded-full bg-success/20 text-success">
                   Completed
                 </span>
               )}

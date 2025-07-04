@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',           // Change if you have a different MySQL username
   password: 'yoshani#28',           // Set your MySQL password here
-  database: 'NoteTask'   // Change to 'Note Task' if you kept the space (not recommended)
+  database: 'notetask'   // Change to 'Note Task' if you kept the space (not recommended)
 });
 
 connection.connect((err) => {
