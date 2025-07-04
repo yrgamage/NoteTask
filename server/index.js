@@ -1,4 +1,7 @@
-// index.js
+import express from 'express';
+import cors from 'cors';
+import mysql from 'mysql2';
+
 const express = require('express');
 const app = express();
 const connection = require('./Db');
@@ -6,6 +9,7 @@ const port = 3000;
 
 // Middleware to parse JSON
 app.use(express.json());
+app.use(cors());
 
 // Sample route
 app.get('/', (req, res) => {
