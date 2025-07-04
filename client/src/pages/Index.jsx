@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import TaskForm from '../components/TaskForm';
 import TaskList from '../components/TaskList';
 import ThemeToggle from '../components/ThemeToggle';
+  import axios from 'axios';
 
 const Index = () => {
   const [tasks, setTasks] = useState([]);
@@ -12,34 +13,20 @@ const Index = () => {
   const [tasksToShow] = useState(5);
 
   // Initialize with some sample tasks
-  useEffect(() => {
-    const sampleTasks = [
-      {
-        id: 1,
-        title: "Review project proposal",
-        description: "Go through the quarterly project proposal and provide feedback to the team",
-        completed: false,
-        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
-      },
-      {
-        id: 2,
-        title: "Update website content",
-        description: "Refresh the homepage content and update the about section",
-        completed: false,
-        createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(), // 4 hours ago
-      },
-      {
-        id: 3,
-        title: "Schedule team meeting",
-        description: "Organize weekly sync meeting with the development team",
-        completed: false,
-        createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(), // 6 hours ago
-      }
-    ];
-    
-    setTasks(sampleTasks);
-    updateDisplayedTasks(sampleTasks);
-  }, []);
+
+
+useEffect(() => {
+  axios.get('http://localhost:3000/api/tasks')
+    .then(res => {
+      const allTasks = res.data;
+      setTasks(allTasks);
+      updateDisplayedTasks(allTasks);
+    })
+    .catch(err => {
+      console.error('Error fetching tasks:', err);
+    });
+}, []);
+
 
   const updateDisplayedTasks = (allTasks) => {
     const activeTasks = allTasks.filter(task => !task.completed);
@@ -50,14 +37,20 @@ const Index = () => {
   };
 
   const handleAddTask = (newTask) => {
-    const updatedTasks = [newTask, ...tasks];
-    setTasks(updatedTasks);
-    updateDisplayedTasks(updatedTasks);
-    
-    // Show success animation
-    const event = new CustomEvent('taskAdded');
-    window.dispatchEvent(event);
-  };
+  axios.post('http://localhost:3000/api/tasks', newTask)
+    .then(res => {
+      const addedTask = { ...newTask, id: res.data.taskId }; // assign backend id
+      const updatedTasks = [addedTask, ...tasks];
+      setTasks(updatedTasks);
+      updateDisplayedTasks(updatedTasks);
+
+      // Animation
+      const event = new CustomEvent('taskAdded');
+      window.dispatchEvent(event);
+    })
+    .catch(err => console.error('Error adding task:', err));
+};
+
 
   const handleToggleComplete = (taskId) => {
     const updatedTasks = tasks.map(task =>
@@ -68,10 +61,15 @@ const Index = () => {
   };
 
   const handleDeleteTask = (taskId) => {
-    const updatedTasks = tasks.filter(task => task.id !== taskId);
-    setTasks(updatedTasks);
-    updateDisplayedTasks(updatedTasks);
-  };
+  axios.delete(`http://localhost:3000/api/tasks/${taskId}`)
+    .then(() => {
+      const updatedTasks = tasks.filter(task => task.id !== taskId);
+      setTasks(updatedTasks);
+      updateDisplayedTasks(updatedTasks);
+    })
+    .catch(err => console.error('Error deleting task:', err));
+};
+
 
   const handleLoadMore = async () => {
     setIsLoading(true);

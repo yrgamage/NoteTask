@@ -6,7 +6,7 @@ import axios from 'axios';
 const TaskItem = ({ task, onToggleComplete, onDelete }) => {
 
    useEffect(()=>{
-    axios.get('http://localhost:3000')
+    axios.get('http://localhost:3000/api/tasks')
     .then (res => console.log(res))
     .catch(err=>console.log(err))
     },[])

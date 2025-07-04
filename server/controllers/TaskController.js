@@ -1,23 +1,49 @@
 const Task = require('../models/TaskModel');
 
-const taskController = {
-  getAllTasks: async (req, res, next) => {
-    try {
-      const tasks = await Task.getAll();
-      res.json(tasks);
-    } catch (err) {
-      next(err);
-    }
-  },
-
-  createTask: async (req, res, next) => {
-    try {
-      const newTask = await Task.create(req.body);
-      res.status(201).json(newTask);
-    } catch (err) {
-      next(err);
-    }
-  }
+// GET /tasks
+const getTasks = (req, res) => {
+  Task.getAllTasks((err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
 };
 
-module.exports = taskController;
+// POST /tasks
+const addTask = (req, res) => {
+  const { title, description } = req.body;
+
+  // Automatically set status and date on the backend
+  const status = 'pending';             // or false if you use boolean
+  const date = new Date();              // current timestamp
+
+  const newTask = { title, description, status, date };
+
+  // Call your model method to insert the task into DB
+  Task.createTask(newTask, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.status(201).json({ message: 'Task created', taskId: result.insertId });
+  });
+};
+
+// DELETE /tasks/:id
+const deleteTask = (req, res) => {
+  const id = req.params.id;
+
+  Task.deleteTask(id, (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+
+    res.json({ message: 'Task deleted' });
+  });
+};
+
+module.exports = {
+  getTasks,
+  addTask,
+  deleteTask
+};
