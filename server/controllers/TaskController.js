@@ -13,12 +13,11 @@ const addTask = (req, res) => {
   const { title, description } = req.body;
 
   // Automatically set status and date on the backend
-  const status = 'pending';             // or false if you use boolean
-  const date = new Date();              // current timestamp
+  const status = 'pending';             
+  const date = new Date();            
 
   const newTask = { title, description, status, date };
 
-  // Call your model method to insert the task into DB
   Task.createTask(newTask, (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });

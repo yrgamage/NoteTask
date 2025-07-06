@@ -1,9 +1,8 @@
-
-import { useState } from 'react';
+import { useState } from "react";
 
 const TaskForm = ({ onAddTask }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -11,10 +10,10 @@ const TaskForm = ({ onAddTask }) => {
     if (!title.trim()) return;
 
     setIsSubmitting(true);
-    
+
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     const newTask = {
       id: Date.now(),
       title: title.trim(),
@@ -24,8 +23,8 @@ const TaskForm = ({ onAddTask }) => {
     };
 
     onAddTask(newTask);
-    setTitle('');
-    setDescription('');
+    setTitle("");
+    setDescription("");
     setIsSubmitting(false);
   };
 
@@ -35,11 +34,11 @@ const TaskForm = ({ onAddTask }) => {
         <h2 className="mb-6 text-2xl font-bold text-center text-foreground">
           Add New Task
         </h2>
-        
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label 
-              htmlFor="title" 
+            <label
+              htmlFor="title"
               className="block text-sm font-medium text-foreground/80"
             >
               Task Title
@@ -50,14 +49,14 @@ const TaskForm = ({ onAddTask }) => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter your task title..."
-              className="w-full px-4 py-3 transition-all duration-200 border bg-input border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent hover:border-primary/50 placeholder:text-muted-foreground"
+              className="w-full py-3 pl-10 pr-4 text-gray-800 placeholder-gray-500 transition-all duration-300 border-2 border-blue-200 rounded-xl dark:border-blue-600 focus:border-blue-400 dark:focus:border-blue-400 bg-blue-50 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-600"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <label 
-              htmlFor="description" 
+            <label
+              htmlFor="description"
               className="block text-sm font-medium text-foreground/80"
             >
               Description
@@ -68,7 +67,7 @@ const TaskForm = ({ onAddTask }) => {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Add some details about your task..."
               rows={4}
-              className="w-full px-4 py-3 transition-all duration-200 border resize-none bg-input border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent hover:border-primary/50 placeholder:text-muted-foreground"
+              className="w-full py-3 pl-10 pr-4 text-gray-800 placeholder-gray-500 transition-all duration-300 border-2 border-blue-200 rounded-xl dark:border-blue-600 focus:border-blue-400 dark:focus:border-blue-400 bg-blue-50 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-600"
             />
           </div>
 
@@ -76,9 +75,10 @@ const TaskForm = ({ onAddTask }) => {
             type="submit"
             disabled={!title.trim() || isSubmitting}
             className={`w-full py-3 px-6 rounded-xl font-medium transition-all duration-300
-                       ${!title.trim() || isSubmitting
-                         ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                         : 'bg-primary text-primary-foreground hover:bg-primary/90 hover-lift hover-glow'
+                       ${
+                         !title.trim() || isSubmitting
+                           ? "bg-muted text-muted-foreground cursor-not-allowed"
+                           : "bg-primary text-primary-foreground hover:bg-primary/90 hover-lift hover-glow"
                        }`}
           >
             {isSubmitting ? (

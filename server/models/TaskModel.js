@@ -2,7 +2,7 @@ const db = require('../config/Db');
 
 // GET all tasks
 const getAllTasks = (callback) => {
-  db.query('SELECT * FROM task', callback);
+  db.query('SELECT * FROM task ORDER BY date ASC', callback);
 };
 
 // CREATE a new task

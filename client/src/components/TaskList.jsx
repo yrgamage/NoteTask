@@ -1,28 +1,17 @@
-import React, { useState } from 'react';
-import { Calendar, Search, Filter } from 'lucide-react';
-import TaskItem from './TaskItem';
 
-const TaskList = ({ tasks, onToggleComplete, onDelete, onLoadMore, hasMore, isLoading }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('newest');
+import { Calendar, Search, Filter } from "lucide-react";
+import TaskItem from "./TaskItem";
 
-  const filteredTasks = tasks.filter(task =>
-    task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    task.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const sortedTasks = [...filteredTasks].sort((a, b) => {
-    switch (sortBy) {
-      case 'newest':
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      case 'oldest':
-        return new Date(a.createdAt) - new Date(b.createdAt);
-      case 'alphabetical':
-        return a.title.localeCompare(b.title);
-      default:
-        return 0;
-    }
-  });
+const TaskList = ({
+  tasks,
+  onToggleComplete,
+  onDelete,
+  onLoadMore,
+  hasMore,
+  isLoading,
+  searchTerm,
+  setSearchTerm
+}) => {
 
   return (
     <div className="flex flex-col h-full p-6 bg-white shadow-lg dark:bg-gray-800 rounded-2xl">
@@ -39,7 +28,10 @@ const TaskList = ({ tasks, onToggleComplete, onDelete, onLoadMore, hasMore, isLo
       {/* Search and Filter Section */}
       <div className="mb-6 space-y-4">
         <div className="relative">
-          <Search className="absolute text-gray-400 transform -translate-y-1/2 left-3 top-1/2 dark:text-gray-500" size={18} />
+          <Search
+            className="absolute text-gray-400 transform -translate-y-1/2 left-3 top-1/2 dark:text-gray-500"
+            size={18}
+          />
           <input
             type="text"
             value={searchTerm}
@@ -49,41 +41,35 @@ const TaskList = ({ tasks, onToggleComplete, onDelete, onLoadMore, hasMore, isLo
           />
         </div>
 
-        <div className="flex items-center gap-2">
-          <Filter className="text-gray-400 dark:text-gray-500" size={18} />
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="px-4 py-2 text-gray-800 transition-all duration-300 border-2 border-gray-200 rounded-lg dark:border-gray-600 focus:border-gray-400 dark:focus:border-gray-400 bg-gray-50 dark:bg-gray-700 dark:text-white focus:outline-none"
-          >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-            <option value="alphabetical">Alphabetical</option>
-          </select>
-        </div>
-      </div>
-
       {/* Tasks List - scrollable */}
       <div
         className="flex-1 space-y-4 overflow-y-auto"
-        style={{ maxHeight: '700px' }} // Adjust height as needed
+        style={{ maxHeight: "700px" }} 
       >
-        {sortedTasks.length === 0 ? (
+        {tasks.length === 0 ? (
           <div className="py-12 text-center">
             {searchTerm ? (
               <>
-                <div className="mb-2 text-lg text-gray-400 dark:text-gray-500">🔍</div>
-                <p className="text-gray-500 dark:text-gray-400">No tasks found matching "{searchTerm}"</p>
+                <div className="mb-2 text-lg text-gray-400 dark:text-gray-500">
+                  🔍
+                </div>
+                <p className="text-gray-500 dark:text-gray-400">
+                  No tasks found matching "{searchTerm}"
+                </p>
               </>
             ) : (
               <>
-                <div className="mb-2 text-lg text-gray-400 dark:text-gray-500">📝</div>
-                <p className="text-gray-500 dark:text-gray-400">No tasks yet. Create your first task!</p>
+                <div className="mb-2 text-lg text-gray-400 dark:text-gray-500">
+                  📝
+                </div>
+                <p className="text-gray-500 dark:text-gray-400">
+                  No tasks yet. Create your first task!
+                </p>
               </>
             )}
           </div>
         ) : (
-          sortedTasks.map((task) => (
+          tasks.map((task) => (
             <TaskItem
               key={task.id}
               task={task}
@@ -135,9 +121,11 @@ const TaskList = ({ tasks, onToggleComplete, onDelete, onLoadMore, hasMore, isLo
       {tasks.length > 0 && (
         <div className="flex justify-between pt-4 mt-6 text-sm text-gray-500 border-t border-gray-200 dark:border-gray-600 dark:text-gray-400">
           <span>Total Tasks: {tasks.length}</span>
-          <span>Showing: {sortedTasks.length}</span>
+          <span>Showing: {tasks.length}</span>
         </div>
       )}
+      </div>
+
     </div>
   );
 };

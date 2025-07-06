@@ -1,7 +1,3 @@
-/*
-  Enhanced Task Manager UI with full dark theme text color updates and full-width layout
-*/
-
 import React, { useEffect, useState } from "react";
 import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
@@ -16,19 +12,26 @@ const Index = () => {
   const [tasksToShow] = useState(5);
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
-  const [messageType, setMessageType] = useState("success"); // default to success
+  const [messageType, setMessageType] = useState("success");
 
-  useEffect(() => {
+  const fetchTasks = () => {
     axios
-      .get("http://localhost:3000/api/tasks")
+      .get(`http://localhost:3000/api/tasks`) // no _page or _limit here
       .then((res) => {
-        const allTasks = res.data;
+        console.log("Fetched tasks:", res.data);
+        const allTasks = res.data.map((task) => ({
+          ...task,
+          createdAt: task.createdAt || task.created_at || "",
+        }));
         setTasks(allTasks);
         updateDisplayedTasks(allTasks);
+        setHasMore(allTasks.filter((t) => !t.completed).length > tasksToShow);
       })
-      .catch((err) => {
-        console.error("Error fetching tasks:", err);
-      });
+      .catch((err) => console.error(err));
+  };
+
+  useEffect(() => {
+    fetchTasks();
   }, []);
 
   const updateDisplayedTasks = (allTasks) => {
@@ -36,8 +39,13 @@ const Index = () => {
     const sortedTasks = activeTasks.sort(
       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
-    setDisplayedTasks(sortedTasks.slice(0, tasksToShow));
-    setHasMore(sortedTasks.length > tasksToShow);
+
+    // Only set the first 5 initially
+    const firstFive = sortedTasks.slice(0, 5);
+    setDisplayedTasks(firstFive);
+
+    // Indicate if there are more than 5 remaining for "Load More" button
+    setHasMore(sortedTasks.length > firstFive.length);
   };
 
   const handleAddTask = (newTask) => {
@@ -49,28 +57,17 @@ const Index = () => {
         setTasks(updatedTasks);
         updateDisplayedTasks(updatedTasks);
 
-        // Dispatch event if needed
         const event = new CustomEvent("taskAdded");
         window.dispatchEvent(event);
 
-        // Show message for task added
         setMessageText("Task added successfully");
-        setMessageType("added"); // green color for success
+        setMessageType("added");
         setShowMessage(true);
 
-        // Hide message after 2 seconds
         setTimeout(() => setShowMessage(false), 2000);
       })
       .catch((err) => console.error("Error adding task:", err));
   };
-
-  // const handleToggleComplete = (taskId) => {
-  //   const updatedTasks = tasks.map((task) =>
-  //     task.id === taskId ? { ...task, completed: !task.completed } : task
-  //   );
-  //   setTasks(updatedTasks);
-  //   updateDisplayedTasks(updatedTasks);
-  // };
 
   const handleDeleteTask = (taskId, purpose = "default") => {
     axios
@@ -80,16 +77,15 @@ const Index = () => {
         setTasks(updatedTasks);
         updateDisplayedTasks(updatedTasks);
 
-        // Decide message and type based on purpose
         let message = "Task deleted";
         let type = "success";
 
         if (purpose === "userDeleted") {
           message = "Task Deleted";
-          type = "deleted"; // green or something
+          type = "deleted";
         } else if (purpose === "userCompleted") {
           message = "Task Completed";
-          type = "success"; // maybe yellow/orange
+          type = "success";
         }
 
         setMessageText(message);
@@ -100,7 +96,7 @@ const Index = () => {
       .catch((err) => {
         console.error("Error deleting task:", err);
         setMessageText("Failed to delete task");
-        setMessageType("error"); // red color for error
+        setMessageType("error");
         setShowMessage(true);
         setTimeout(() => setShowMessage(false), 2000);
       });
@@ -108,14 +104,13 @@ const Index = () => {
 
   const handleLoadMore = async () => {
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 500)); // optional delay for UX
     const activeTasks = tasks.filter((task) => !task.completed);
     const sortedTasks = activeTasks.sort(
       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
-    const newDisplayCount = displayedTasks.length + tasksToShow;
-    setDisplayedTasks(sortedTasks.slice(0, newDisplayCount));
-    setHasMore(sortedTasks.length > newDisplayCount);
+    setDisplayedTasks(sortedTasks); // show ALL active tasks
+    setHasMore(false); //  nothing more to load now
     setIsLoading(false);
   };
 
@@ -130,45 +125,37 @@ const Index = () => {
       <ThemeToggle />
       <header className="relative z-10 w-full px-8 py-6 text-left">
         <h1
-          className="text-5xl font-extrabold md:text-6xl drop-shadow-md animate-fade-in
-               text-[#0A1D56] dark:text-white"
-          style={{
-            fontFamily: "Poppins, sans-serif",
-          }}
+          className="text-5xl font-extrabold md:text-6xl drop-shadow-md animate-fade-in text-[#0A1D56] dark:text-white"
+          style={{ fontFamily: "Poppins, sans-serif" }}
         >
           NoteTask
         </h1>
         <p
           className="mt-1 text-lg text-gray-600 dark:text-gray-300 animate-fade-in"
-          style={{
-            animationDelay: "200ms",
-            fontFamily: "Poppins, sans-serif",
-          }}
+          style={{ animationDelay: "200ms", fontFamily: "Poppins, sans-serif" }}
         >
-          Your personal task manager
+          Your Personal Task Manager
         </p>
       </header>
 
       <main className="relative z-10 w-full px-6 pb-20">
         <div className="flex flex-col w-full gap-6 px-2 lg:flex-row">
           <div className="w-full lg:w-1/2 lg:ml-6">
-            {" "}
-            {/* <- nudged right with ml-6 */}
             <TaskForm onAddTask={handleAddTask} />
           </div>
           <div className="w-full lg:w-1/2">
             {showMessage && (
               <div
                 className={`fixed z-50 px-4 py-2 text-white rounded shadow-md bottom-6 right-6 animate-fade-in-out
-    ${
-      messageType === "success"
-        ? "bg-green-500"
-        : messageType === "deleted"
-        ? "bg-red-500"
-        : messageType === "added"
-        ? "bg-yellow-400"
-        : ""
-    }`}
+                  ${
+                    messageType === "success"
+                      ? "bg-green-500"
+                      : messageType === "deleted"
+                      ? "bg-red-500"
+                      : messageType === "added"
+                      ? "bg-yellow-400"
+                      : ""
+                  }`}
               >
                 {messageText}
               </div>

@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
 
 const TaskItem = ({ task, onToggleComplete, onDelete }) => {
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/tasks")
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  }, []);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    console.log("Task received by TaskItem:", task);
+    console.log("createdAt field:", task.createdAt);
+  }, [task]);
 
   const handleToggleComplete = async () => {
     await new Promise((resolve) => setTimeout(resolve, 300));
@@ -18,18 +16,6 @@ const TaskItem = ({ task, onToggleComplete, onDelete }) => {
     setIsDeleting(true);
     await new Promise((resolve) => setTimeout(resolve, 300));
     onDelete(task.id);
-
-    // Optionally, you can add custom logic here if you want to show a message after deletion.
-    // Currently, 'type' is not defined, so this block has been removed to prevent errors.
-  };
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
   };
 
   return (
@@ -96,21 +82,6 @@ const TaskItem = ({ task, onToggleComplete, onDelete }) => {
             )}
 
             <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-              <span className="flex items-center space-x-1">
-                <svg
-                  className="w-3 h-3"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span>{formatDate(task.createdAt)}</span>
-              </span>
-
               {task.completed && (
                 <span className="px-2 py-1 text-xs font-medium rounded-full bg-success/20 text-success">
                   Completed
