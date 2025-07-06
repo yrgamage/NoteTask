@@ -1,5 +1,7 @@
 # 📝 NoteTask
 
+![NoteTask Image](client/src/assets/NoteTaskSS.png)
+
 A full-stack, dockerized task manager app built with **React**, **Express**, and **MySQL**. NoteTask allows users to create, search, complete, and delete tasks with a beautiful animated UI and theme toggle (light/dark mode). Designed for a clean user experience and performance, the app supports pagination, filtering, and modular frontend-backend separation.
 
 ---
@@ -124,3 +126,4 @@ Editable tasks
 Yoshani Gamage
 
 ---
+

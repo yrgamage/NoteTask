@@ -16,7 +16,7 @@ const Index = () => {
 
   const fetchTasks = () => {
     axios
-      .get(`http://localhost:3000/api/tasks`) // no _page or _limit here
+      .get(`http://localhost:3000/api/tasks`) 
       .then((res) => {
         console.log("Fetched tasks:", res.data);
         const allTasks = res.data.map((task) => ({
