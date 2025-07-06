@@ -17,42 +17,31 @@ A full-stack, dockerized task manager app built with **React**, **Express**, and
 
 ---
 
+```plaintext
 ## 📁 Project Structure
 
 notetask/
 │
 ├── backend/
-│ ├── controllers/
-│ │ └── TaskController/
-│ ├── models/
-│ │ └── TaskModel/
-│ ├── routes/
-│ │ └── TaskRoute/
-│ ├── config
-│ │ └── Db/
-│ └── index.js
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── config
+│   └── index.js
+│   └──Dockerfile (backend)
 │
 ├── frontend/
-│ ├── public/
-│ ├── src/
-│ │ ├── components/
-│ │   └── TaskForm/
-│ │   └── TaskItem/
-│ │   └── TaskList/
-│ │   └── ThemeToggle/
-│ │ ├── pages/
-│ │   └── Index.js/
-│ └── package.json
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   └── pages/
+│   └── package.json
+│   └── .env
+│   └──Dockerfile (frontend)
 │
 ├── docker-compose.yml
-├── Dockerfile (backend)
-├── Dockerfile (frontend)
-├── .env
 └── README.md
-
-yaml
-Copy
-Edit
+```
 
 ---
 
@@ -76,51 +65,43 @@ Edit
 
 ```bash
 # Clone the repo
-git clone https://github.com/yrgamage/NoteTask.git
+git clone https://github.com/yourusername/notetask.git
 cd notetask
 
 # Build and start containers
 docker-compose up --build
 The frontend will be available at: http://localhost:5173
-The backend API will be available at: http://localhost:3000
+The backend API will be available at: http://localhost:3001
 
 ⚙️ Environment Variables
 Create a .env file in the backend folder with:
 
-ini
-Copy
-Edit
 DB_HOST=db
 DB_USER=root
 DB_PASSWORD=yourpassword
 DB_NAME=notetask
-PORT=3000
+PORT=3306
+
 💻 Running Locally (Non-Docker)
 In one terminal:
 
-bash
-Copy
-Edit
 cd backend
 npm install
 npm run dev
 In another:
 
-bash
-Copy
-Edit
 cd frontend
 npm install
-npm 
+npm run dev
+
 This works using concurrently when started via:
 
-bash
-Copy
-Edit
 npm run start
 
 📦 API Endpoints
+
 Method	Route	Description
+
 GET	/api/tasks	Get all tasks
 POST	/api/tasks	Create a new task
 DELETE	/api/tasks/:id	Delete a task
@@ -132,11 +113,14 @@ Mobile responsive layout
 
 Dark/light theme toggle
 
+
+🧪 Future Improvements
+JWT authentication
+User accounts
+Due date & reminder notifications
+Editable tasks
+
 🧑‍💻 Author
 Yoshani Gamage
-
-yaml
-Copy
-Edit
 
 ---
