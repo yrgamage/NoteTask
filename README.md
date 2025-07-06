@@ -20,26 +20,26 @@ A full-stack, dockerized task manager app built with **React**, **Express**, and
 ---
 
 ```plaintext
-## 📁 Project Structure
+📁 Project Structure
 
-notetask/
+NoteTask/
 │
-├── backend/
+├── server/
 │   ├── controllers/
 │   ├── models/
 │   ├── routes/
 │   ├── config
-│   └── index.js
-│   └──Dockerfile (backend)
+│   ├── index.js
+│   ├── .env
+│   └── Dockerfile (backend)
 │
-├── frontend/
+├── client/
 │   ├── public/
 │   ├── src/
 │   │   ├── components/
 │   │   └── pages/
-│   └── package.json
-│   └── .env
-│   └──Dockerfile (frontend)
+│   ├── package.json
+│   └── Dockerfile (frontend)
 │
 ├── docker-compose.yml
 └── README.md
@@ -67,8 +67,8 @@ notetask/
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/notetask.git
-cd notetask
+git clone https://github.com/yrgamage/NoteTask.git
+cd NoteTask
 
 # Build and start containers
 docker-compose up --build
@@ -87,17 +87,18 @@ PORT=3306
 💻 Running Locally (Non-Docker)
 In one terminal:
 
-cd backend
+cd server
 npm install
 npm run dev
 In another:
 
-cd frontend
+cd client
 npm install
 npm run dev
 
 This works using concurrently when started via:
 
+npm install
 npm run start
 
 📦 API Endpoints
@@ -124,6 +125,3 @@ Editable tasks
 
 🧑‍💻 Author
 Yoshani Gamage
-
----
-
