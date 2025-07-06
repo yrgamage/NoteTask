@@ -30,10 +30,10 @@ const TaskForm = ({ onAddTask }) => {
   };
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full mx-auto my-8 max-md">
       <div className="p-8 glass-effect rounded-2xl animate-fade-in">
         <h2 className="mb-6 text-2xl font-bold text-center text-foreground">
-          ✨ Add New Task
+          Add New Task
         </h2>
         
         <form onSubmit={handleSubmit} className="space-y-6">

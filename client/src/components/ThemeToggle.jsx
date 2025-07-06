@@ -29,7 +29,7 @@ const ThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="fixed top-6 right-6 z-50 p-3 rounded-full glass-effect hover-lift hover-glow group"
+      className="fixed z-50 p-3 rounded-full top-6 right-6 glass-effect hover-lift hover-glow group"
       aria-label="Toggle theme"
     >
       <div className="relative w-6 h-6">
