@@ -23,9 +23,10 @@ services:
       - ./server:/app
       - /app/node_modules
     environment:
-      MYSQL_ROOT_PASSWORD: yoshani#28
-      MYSQL_DATABASE: notetask
-      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      DB_HOST: ${DB_HOST}
 
   client:
     build: ./client
